@@ -1,0 +1,18 @@
+{% if trajectories %}
+{
+"trajectory":
+	[
+	{% for trajectory in trajectories %}
+	    {
+			"id":"{{ trajectory.lion.id }}", 
+	    	"name":"{{ trajectory.lion.name }}", 
+	    	"lat":"{{ trajectory.posy }}", 
+	    	"lon": "{{ trajectory.posx }}"}
+			{% if forloop.counter < trajectoryLength %}
+	    	,
+	    	{% endif %}
+	{% endfor %}
+	]
+}
+{% endif %}
+

@@ -1,0 +1,124 @@
+{% extends 'rango/base.html' %}
+
+{% block title %} Trajectories {% endblock %}
+{% block body_block %}
+        <h1>Trajectories</h1>
+
+        {% if trajectories %}
+                <table border="1">
+
+                    <tr>
+                        <td>Elapsed time</td>
+                        <td>ID </td>
+                        <td>lion </td>
+                        <td>Pride </td>
+                        <td>Pos x </td>
+                        <td>Pos y </td>
+                        <td>Age </td>
+                        <td>Satiety </td>
+                        <td>Alive </td>
+                        <td>Roving </td>
+                    </tr>
+                    <tr>
+                        {% for trajectory in trajectories %}
+                        <!-- Following line changed to add an HTML hyperlink -->
+                        <td>{{ trajectory.elapsedtime }} </td>
+                        <td>{{ trajectory.id }} </td>
+                        <td>{{ trajectory.lion.name }} </td>
+                        <td>{{ trajectory.lion.pride.name }} </td>
+                        <td>{{ trajectory.posx }} </td>
+                        <td>{{ trajectory.posy }} </td>
+                        <td>{{ trajectory.age }} </td>
+                        <td>{{ trajectory.satiety }} </td>
+                        <td>{{ trajectory.alive }} </td>
+                        <td>{{ trajectory.roving }} </td>
+                    </tr>
+            {% endfor %}
+                </table>
+       {% else %}
+            <strong>There are no lions present.</strong>
+       {% endif %}
+<br><br>
+    <div id="map"></div>
+<script>
+    var cnt = 1;
+      function initMap() {
+        var lat = -1.227;
+        var lng = 35.10476;
+        var markers = [];
+        var mapDiv = document.getElementById('map');
+        var map = new google.maps.Map(mapDiv, {
+            center: {lat: -1.227, lng: 35.10476},
+            zoom: 8
+        });
+
+        // place markers in starting positions
+        var markers = [
+            {% for trajectory in trajectories %}
+                ['{{ trajectory.lion.name }}', {{ trajectory.posy }}, {{ trajectory.posx }}],
+            {% endfor %}
+        ];
+
+        var gmarkers = [];
+        for( i = 0; i < markers.length; i++ ) {
+            var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+            marker = new google.maps.Marker({
+                position: position,
+                map: map,
+                title: markers[i][0],
+                icon: '/static/lion-icon.png'
+                });
+                gmarkers.push(marker);
+            }
+            gmarkers[0].setMap(map);
+            var startTime = new Date().getTime();
+
+            for (j = 0; j < gmarkers.length; j++) // loop through each marker and move it
+            {
+                moveMarker( map, gmarkers[j], lat, lng, startTime);
+            }
+        } 
+    
+    function moveMarker( map, marker, lat, lng, limit) 
+    {    
+         var refresh = setInterval( function(){ 
+            if(self.cnt > 1000)
+            {
+                clearInterval(refresh);
+                return;
+            }
+            
+            lat = lat + (Math.random()/100);
+            lng = lng + (Math.random()/100);
+            getAjaxTrajectories(self.cnt);
+            marker.setPosition(new google.maps.LatLng(lat, lng));
+            self.cnt += 1;
+         }, 1000 );
+    };
+
+    function getAjaxTrajectories()
+    {
+
+       $.ajax({
+        type : 'GET',
+        url  : '/rango/lion/ajaxTrajectories/',
+        dataType : 'json',
+        success  : function ( data ) {
+        $.each( data.reviews, function( i, itemData ) {
+           reviewArray[i] = itemData.review;
+           alert (reviewArray[i]);
+        });
+        },
+        error    : function ( XMLHttpRequest, textStatus, errorThrown) {
+            var err = "An error has occured: " + errorThrown;
+            $("body").append(err);
+            }
+        });
+
+    } 
+
+     </script>
+     <script async defer
+         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7FuiuBWpIFKQNdUAE0aBAjRsPpTsZqC8&callback=initMap">
+     </script>
+{% endblock %}

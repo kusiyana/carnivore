@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Initialise prides from shapefile</title>
+    </head>
+
+    <body>
+        <h1>Pride</h1>
+
+        {% if shapefileIndex %}
+        <table border="1">
+            <tr>
+                <td>Shapefile index</td>
+                <td>Lion count </td>
+                <td>Centroid x </td>
+                <td>Centroid y </td>
+
+            </tr>
+            <tr>
+                
+                <!-- Following line changed to add an HTML hyperlink -->
+                <td>{{ shapefileIndex }} </td>
+                <td>{{ lionCount }} </td>
+                <td>{{ centroid.0 }} </td>
+                <td>{{ centroid.1 }} </td>
+
+
+            </tr>
+       {% else %}
+            <strong>There are no lions present.</strong>
+       {% endif %}
+   </table>
+    </body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Lion</title>
+    </head>
+
+    <body>
+        <h1>Lion says..hello world!</h1>
+
+        {% if category %}
+            <ul>
+                <!-- Following line changed to add an HTML hyperlink -->
+                <li><a href="/rango/category/{{ category.url }}">{{ category }}</a></li>
+
+            </ul>
+       {% else %}
+            <strong>There are no categories present.</strong>
+       {% endif %}
+<a href="/rango/add_category/">Add a New Category</a> | 
+
+    </body>
+</html>

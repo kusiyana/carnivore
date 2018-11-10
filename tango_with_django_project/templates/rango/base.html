@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	    <style>
+	       #map {
+	        width: 600px;
+	        height: 400px;
+	      }
+	    </style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+$("#btnjson").click(function(){
+$.getJSON("/rango/lion/ajaxTrajectories/1",function(ajaxresult){
+$("#SiteName").append(ajaxresult.name);
+$("#Tutorial_Name").append(ajaxresult.Tutorial);
+$("#Lesson").append(ajaxresult.Lesson);
+});
+});
+});
+</script>
+        <title>Lion - {% block title %}How to Tango with Django!{% endblock %}</title>
+    </head>
+    <body>
+	    {% block body_block %}{% endblock %}
+    </body>
+</html>

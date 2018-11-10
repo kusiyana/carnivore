@@ -1,0 +1,2 @@
+ [t,x3] = ode45('exponential', [0 2000], [,0]);
+ plot(t, x3);

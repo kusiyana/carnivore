@@ -1,0 +1,80 @@
+{% extends 'rango/hayden.html' %}
+{% load staticfiles %}
+{% block mainHeader %}
+Step 4
+{% endblock %}
+
+{% block title %} Simulation complete {% endblock %}
+{% block body_block %}
+        <h1>Step 4. View simulation</h1>
+
+        {% if status %}
+        <p>The Google map below shows the simulation that was created in Step 3. </p>
+                <div class="col-md-6">
+                    <a href="/rango/" class="btn btn-primary">Start over</a>
+                    <a href="/rango/lion/runSimulation" class="btn btn-primary">Back</a>
+                </div>
+       {% else %}
+            <strong>Simulation error.</strong>
+       {% endif %}
+<br><br>
+    <div id="map"></div>
+    <script>
+      function initMap() {
+        var lat = -1.227;
+        var lng = 35.10476;
+        var markers = [];
+        var mapDiv = document.getElementById('map');
+        var map = new google.maps.Map(mapDiv, {
+            center: {lat: -1.227, lng: 35.10476},
+            zoom: 8
+        });
+
+    var markers = [
+        ['Lion 1, Pride 3', -1.222, 35.102],
+        ['Lion 2, Pride 3', -1.112, 35.122]
+    ];
+
+    var gmarkers = [];
+    for( i = 0; i < markers.length; i++ ) {
+        var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+        //bounds.extend(position);
+        marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            title: markers[i][0],
+            icon: '/static/lion-icon.png'
+            });
+            gmarkers.push(marker);
+        }
+        gmarkers[0].setMap(map);
+
+        for (i = 0; i < 40; i++) 
+        { 
+            for (j = 0; j < gmarkers.length; j++) 
+            { 
+                moveMarker( map, gmarkers[j], lat, lng);
+            }
+        } 
+      }
+    
+    //self.setInterval("updateMarkerPosition(-1.220, 35.106)", 3000);
+   // marker.setMap(null);
+    function moveMarker( map, marker, lat, lng) {
+        
+        //delayed so you can see it move
+        setInterval( function(){ 
+            lat = lat + (Math.random()/100);
+            lng = lng + (Math.random()/100);
+            marker.setPosition( new google.maps.LatLng(lat, lng) );
+        }, 3000 );
+
+    };
+
+    
+   // window.DOMContentLoaded = test()
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7FuiuBWpIFKQNdUAE0aBAjRsPpTsZqC8&callback=initMap">
+    </script>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'rango/hayden.html' %}
+{% load staticfiles %}
+{% block mainHeader %}
+Step 2
+{% endblock %}
+
+{% block body_block %}
+<h1>Step 2 -Lions built!</h1>
+<p>Lions have been built from the shapefile density of a single territory and placed at the center of mass of that shapefile.  </p>
+
+    <table border="1">
+        <tr>
+            <td>Shapefile index</td>
+            <td>Lion count </td>
+            <td>Centroid x </td>
+            <td>Centroid y </td>
+
+        </tr>
+       {% if lions %}
+         {% for lion in lions %}
+            <tr>
+                <!-- Following line changed to add an HTML hyperlink -->
+                <td>{{ shapefileIndex }} </td>
+                <td>{{ lionCount }} </td>
+                <td>{{ centroid.0 }} </td>
+                <td>{{ centroid.1 }} </td>
+            </tr>
+            {% endfor %}
+       {% else %}
+            <strong>There are no lions present.</strong>
+       {% endif %}
+   </table>
+   <br><br>
+
+    <div class="col-md-6">
+        <a href="/rango/lion/runSimulation" class="btn btn-primary">Step 3: Run simulation</a>
+        <a href="/rango/lion/initialise" class="btn btn-primary">Back</a>
+    </div>
+{% endblock %}

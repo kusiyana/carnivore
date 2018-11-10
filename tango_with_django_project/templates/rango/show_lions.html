@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Lions</title>
+    </head>
+
+    <body>
+        <h1>List of individual lions</h1>
+
+        {% if lions %}
+        <table border="1">
+            <tr>
+                <td>ID </td>
+                <td>Name </td>
+                <td>Pride </td>
+                <td>Pos x </td>
+                <td>Pos y </td>
+                <td>Age </td>
+                <td>Alive </td>
+            </tr>
+            <tr>
+                {% for lion in lions %}
+                <!-- Following line changed to add an HTML hyperlink -->
+                <td>{{ lion.id }} </td>
+                <td>{{ lion.name }} </td>
+                <td>{{ lion.pride.name }} </td>
+                <td>{{ lion.posx }} </td>
+                <td>{{ lion.posy }} </td>
+                <td>{{ lion.age }} </td>
+                <td>{{ lion.alive }} </td>
+
+
+            </tr>
+                {% endfor %}
+       {% else %}
+            <strong>There are no lions present.</strong>
+       {% endif %}
+   </table>
+    </body>
+</html>

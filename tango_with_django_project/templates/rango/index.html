@@ -1,0 +1,13 @@
+{% extends 'rango/hayden.html' %}
+{% load staticfiles %}
+{% block mainHeader %}
+Home
+{% endblock %}
+
+{% block body_block %}
+<h1>Step 1 - Initialise database</h1>
+<p>In this step we set up the basic matrices in the database that will later be used for storing lion, pride and trajectory information</p>
+	<div class="col-md-6">
+		<a href="/rango/lion/initialise/" class="btn btn-primary">Initialise lion database</a>
+	</div>
+{% endblock %}

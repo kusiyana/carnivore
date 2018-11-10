@@ -1,0 +1,30 @@
+{% extends 'rango/hayden.html' %}
+{% load staticfiles %}
+{% block mainHeader %}
+Step 1
+{% endblock %}
+
+{% block body_block %}
+<h1>Step 1 - Database tables initialised!</h1>
+<p>The database tables have now been built. This means that lions have been initialised in the system in an "unborn" state The next step is to  make some of these "phantom lions" take life based on position data from one or more shapefiles. This initial system builds files from </p>
+
+    <br><br>
+        {% if lionCount %}
+        <table border="1">
+            <tr>
+                <td>No. phantom lions initialised:</td>
+                <td>{{ lionCount }} </td>
+            </tr>
+       {% else %}
+            <strong>There are no lions present.</strong>
+       {% endif %}
+   </table>
+   <br><br>
+    <div class="col-md-6">
+        <a href="/rango/lion/buildLionsFromShapefiles/3" class="btn btn-primary">Step 2: Build lions from shapefiles</a>
+        <a href="/rango/" class="btn btn-primary">Back</a>
+
+    </div>
+{% endblock %}
+
+

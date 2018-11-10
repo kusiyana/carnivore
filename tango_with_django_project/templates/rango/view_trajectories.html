@@ -1,0 +1,127 @@
+{% extends 'rango/base.html' %}
+
+{% block title %} Trajectories {% endblock %}
+{% block body_block %}
+        <h1>Trajectories</h1>
+
+        {% if trajectories %}
+                <table border="1">
+
+                    <tr>
+                        <td>Elapsed time</td>
+                        <td>Lion ID </td>
+                        <td>lion </td>
+                        <td>Pride </td>
+                        <td>Pos x </td>
+                        <td>Pos y </td>
+                        <td>Age </td>
+                        <td>Satiety </td>
+                        <td>Alive </td>
+                        <td>Roving </td>
+                    </tr>
+                    <tr>
+                        {% for trajectory in trajectories %}
+                        <!-- Following line changed to add an HTML hyperlink -->
+                        <td>{{ trajectory.elapsedtime }} </td>
+                        <td>{{ trajectory.lion.id }} </td>
+                        <td>{{ trajectory.lion.name }} </td>
+                        <td>{{ trajectory.lion.pride.name }} </td>
+                        <td>{{ trajectory.posx }} </td>
+                        <td>{{ trajectory.posy }} </td>
+                        <td>{{ trajectory.age }} </td>
+                        <td>{{ trajectory.satiety }} </td>
+                        <td>{{ trajectory.alive }} </td>
+                        <td>{{ trajectory.roving }} </td>
+                    </tr>
+            {% endfor %}
+                </table>
+       {% else %}
+            <strong>There are no lions present.</strong>
+       {% endif %}
+<br><br>
+    <div id="map"></div>
+<script>
+    var cnt = 1;
+    function initMap() 
+    {
+        var lat = -1.227;
+        var lng = 35.10476;
+        var markers = [];
+        var mapDiv = document.getElementById('map');
+        var map = new google.maps.Map(mapDiv, {
+            center: {lat: -1.227, lng: 35.10476},
+            zoom: 8
+        });
+        self.count = 0;
+
+
+        // place markers in starting positions
+        var markers = [
+            {% for trajectory in trajectories %}
+                [{{ trajectory.lion.id }},'{{ trajectory.lion.name }}', {{ trajectory.posy }}, {{ trajectory.posx }}],
+            {% endfor %}
+        ];
+
+        var gmarkers = [];
+        kmarkers = [];
+        for( i = 0; i < markers.length; i++ ) 
+        {
+            var position = new google.maps.LatLng(markers[i][2], markers[i][3]);
+            gmarker = new google.maps.Marker({
+                position: position,
+                map: map,
+                title: markers[i][1],
+                icon: '/static/lion-icon.png'
+                });
+                gmarkers[markers[i][0]] = gmarker;
+                kmarkers[markers[i][0]] = markers[i];
+        }
+        gmarkers[markers[0][0]].setMap(map); // now each gmarker has an ID mapping to each lion ID
+            
+          //  moveMarker(map, markers);
+        var refresh = setInterval(function() 
+        { 
+            moveMarker(map, gmarkers, markers, self.count);
+             if(self.count > gmarkers.length)
+             {
+                 clearInterval(refresh);
+                 return;
+             }
+        }, 1000 );
+
+    } 
+    
+    function moveMarker(map, gmarkers, markers)
+    {    
+        var trajectories = [];
+        $.getJSON('/rango/lion/ajaxTrajectories/' + self.count.toString(), function(result)
+        {
+            $.each(result.trajectory, function(index, value) {
+                trajectories.push([value.id, value.name, value.lat, value.lon]);
+            });
+
+            for (j = 0; j < trajectories.length; j++) // loop through each marker and move it
+            {
+                var newLat = trajectories[j][2];
+                var newLng = trajectories[j][3];
+                gmarkers[trajectories[j][0]].setPosition(new google.maps.LatLng(newLat, newLng));
+             }
+             self.count++;
+        });
+    }
+
+
+     </script>
+     <script async defer
+         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7FuiuBWpIFKQNdUAE0aBAjRsPpTsZqC8&callback=initMap">
+     </script>
+<input type = "button" id = "driver" value = "Load Data" onClick="getAjaxTrajectories()" />
+<div id = "stage" style = "background-color:#cc0;">
+STAGE
+</div>
+
+<button id="btnjson">Load JSON data from getjson.json file!</button>
+<p id="SiteName">Site Name: </p>
+<p id="Tutorial_Name">Tutorial Name: </p>
+<p id="Lesson">Lesson: </p>
+{% endblock %}

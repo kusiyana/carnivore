@@ -1,0 +1,39 @@
+{% extends 'rango/hayden.html' %}
+{% load staticfiles %}
+{% block mainHeader %}
+Step 3
+{% endblock %}
+
+{% block title %} Simulation complete {% endblock %}
+{% block body_block %}
+        <h1>Simulation</h1>
+
+        {% if status %}
+        <p>The simulation is now complete. This means that a number of lions have had an algorithm applied to their movement probability, mating probability, death probability and some other factors. The results of each iteration are stored in the database. The time information for the simulation was as follows:
+                <table border="1">
+
+                    <tr>
+                        <td>tStart</td>
+                        <td>tEnd </td>
+                        <td>time step (days)</td>
+                        <td>max movement (thousands of a degree)</td>
+
+                    </tr>
+                    <tr>
+                        <!-- Following line changed to add an HTML hyperlink -->
+                        <td>{{ tStart}} </td>
+                        <td>{{ tEnd}} </td>
+                        <td>{{ dt }} </td>
+                        <td>{{ maxMovement }} </td>
+                        
+                    </tr>
+                </table>
+               To view the trajectories of this simulation, click on the button below: </p>
+                <div class="col-md-6">
+                    <a href="/rango/lion/view_simulation" class="btn btn-primary">Step 4: View simulation</a>
+                    <a href="/rango/lion/initialise" class="btn btn-primary">Back</a>
+                </div>
+       {% else %}
+            <strong>Simulation error.</strong>
+       {% endif %}
+{% endblock %}
